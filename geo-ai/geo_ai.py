@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import matplotlib.pyplot as plt
 
 # Определение нейронной сети
 class LandscapeClassifier(nn.Module):
@@ -51,7 +52,30 @@ print("\nArea (sq. m):\n", areas[:5])
 print("\nNumber of rainy days (days):\n", rainy_days[:5])
 print("\nClasses:\n", classes[:5])
 
-
 # Обучение нейронной сети
-# Здесь будет ваш код обучения с использованием данных
+num_epochs = 100
+losses = []
 
+for epoch in range(num_epochs):
+    # Forward pass
+    outputs = model(features)
+    loss = criterion(outputs, classes)
+
+    # Backward pass and optimization
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    losses.append(loss.item())
+
+    # Print loss every 10 epochs
+    if (epoch + 1) % 10 == 0:
+        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+
+# Plotting the training loss
+plt.plot(losses, label='Training loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('Training Loss over Epochs')
+plt.legend()
+plt.show()
